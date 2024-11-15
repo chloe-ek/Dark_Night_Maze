@@ -7,7 +7,11 @@ import java.util.List;
 
 
 public class GameRenderer {
-    public static void renderMaze(GraphicsContext gc, Maze maze, int tileSize) {
+    public static void drawEntity(GraphicsContext gc, int x, int y, int tileSize, Color color) {
+        gc.setFill(color);
+        gc.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+    }
+    public static void renderMaze(final GraphicsContext gc, Maze maze, int tileSize) {
         boolean[][] structure = maze.getStructure();
         for (int x = 0; x < structure.length; x++) {
             for (int y = 0; y < structure[0].length; y++) {
@@ -22,14 +26,12 @@ public class GameRenderer {
     public static void renderPlayer(GraphicsContext gc, Player player, int tileSize, Flashlight flashlight) {
         flashlight.setPosition(player.getX(), player.getY());
         flashlight.draw(gc, tileSize);
-        gc.setFill(Color.BLUE);
-        gc.fillRect(player.getX() * tileSize, player.getY() * tileSize, tileSize, tileSize);
+        drawEntity(gc, player.getX(), player.getY(), tileSize, Color.BLUE);
     }
 
     public static void renderGhosts(GraphicsContext gc, List<Ghost> ghosts, int tileSize) {
         for (Ghost ghost : ghosts) {
-            gc.setFill(Color.WHITE);
-            gc.fillOval(ghost.getX() * tileSize, ghost.getY() * tileSize, tileSize, tileSize);
+            drawEntity(gc, ghost.getX(), ghost.getY(), tileSize, Color.WHITE);
         }
     }
 
