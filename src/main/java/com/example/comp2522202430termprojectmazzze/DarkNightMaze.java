@@ -45,7 +45,7 @@ public class DarkNightMaze extends Application {
 
         // image load
         try {
-            playerImage = new Image(getClass().getResource("/images/dark.webp").toExternalForm());
+            playerImage = new Image(getClass().getResource("/images/ghost.png").toExternalForm());
         } catch (NullPointerException e) {
             System.out.println("failed to load image");
             playerImage = null;
@@ -113,8 +113,9 @@ public class DarkNightMaze extends Application {
         for (int i = 0; i < count; i++) {
             int x = random.nextInt(WIDTH);
             int y = random.nextInt(HEIGHT);
-            long moveInterval = 500 + random.nextInt(1000); // Random move interval (500-1500ms)
-            ghosts.add(new Ghost(x, y, moveInterval));
+            long moveInterval = 500 + random.nextInt(1000);// Random move interval (500-1500ms)
+            String imagePath = "/images/ghost.png";
+            ghosts.add(new Ghost(x, y, moveInterval,imagePath));
         }
     }
 
@@ -138,7 +139,7 @@ public class DarkNightMaze extends Application {
     }
 
     // Draw the maze based on tile state (wall or path)
-    private void drawMaze(GraphicsContext gc) {
+    private void drawMaze(final GraphicsContext gc) {
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
                 gc.setFill(maze[x][y] ? Color.GRAY : Color.BLACK);
@@ -150,15 +151,21 @@ public class DarkNightMaze extends Application {
     }
 
     // Draw ghost characters
-    private void drawGhosts(GraphicsContext gc) {
-        gc.setFill(Color.WHITE);
+    private void drawGhosts(final GraphicsContext gc) {
         for (Ghost ghost : ghosts) {
-            gc.fillOval(ghost.getX() * TILE_SIZE, ghost.getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            if (ghost.getGhostImage() != null ){
+                gc.drawImage(ghost.getGhostImage(), ghost.getX() * TILE_SIZE, ghost.getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            } else {
+                gc.setFill(Color.WHITE); // if image fails to load
+                gc.fillOval(ghost.getX() * TILE_SIZE, ghost.getY() * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+
+            }
         }
     }
 
     // Draw collectible items
-    private void drawItems(GraphicsContext gc) {
+    private void drawItems(final GraphicsContext gc) {
         gc.setFill(Color.GREEN);
         for (Item item : items) {
             gc.fillRect(item.getX() * TILE_SIZE + TILE_SIZE / 4, item.getY() * TILE_SIZE + TILE_SIZE / 4, TILE_SIZE / 2, TILE_SIZE / 2);

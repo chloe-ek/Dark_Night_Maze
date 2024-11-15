@@ -1,17 +1,26 @@
 package com.example.comp2522202430termprojectmazzze;
 
+import javafx.scene.image.Image;
+
 import java.util.Random;
 
 public class Ghost implements Movement {
     private int x, y;
+    private Image ghostImage;
     private final Random random = new Random();
     private long lastMoveTime = 0;
     private long moveInterval;
 
-    public Ghost(final int startX, final int startY, final long moveInterval) {
+    public Ghost(final int startX, final int startY, final long moveInterval, final String imagePath) {
         this.x = startX;
         this.y = startY;
         this.moveInterval = moveInterval;
+        try {
+            this.ghostImage = new Image(getClass().getResource("/images/ghost.png").toExternalForm());
+        } catch (NullPointerException e){
+            System.out.println("Ghost image not found");
+            this.ghostImage = null;
+        }
     }
 
 
@@ -22,6 +31,11 @@ public class Ghost implements Movement {
     public int getY() {
         return y;
     }
+
+    public Image getGhostImage(){
+        return ghostImage;
+    }
+
     // 랜덤 이동 메서드
     public void randomMove(boolean[][] maze) {
         long currentTime = System.currentTimeMillis();
@@ -33,6 +47,7 @@ public class Ghost implements Movement {
         }
     }
 
+    @Override
     public void move(int dx, int dy, boolean[][] maze) {
         int newX = x + dx;
         int newY = y + dy;
