@@ -5,11 +5,12 @@ import javafx.scene.image.Image;
 import java.util.Random;
 
 public class Ghost implements Movement {
-    private int x, y;
+    private int x;
+    private int y;
     private Image ghostImage;
     private final Random random = new Random();
     private long lastMoveTime = 0;
-    private long moveInterval;
+    private final long moveInterval;
 
     public Ghost(final int startX, final int startY, final long moveInterval, final String imagePath) {
         this.x = startX;
