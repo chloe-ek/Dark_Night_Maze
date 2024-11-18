@@ -1,18 +1,20 @@
 package com.example.comp2522202430termprojectmazzze;
 
 public class Item {
-    private int x, y;
+    private final int itemX;
+    private final int itemY;
 
-    public Item(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Item(final Position position) {
+        this.itemX = position.getX();
+        this.itemY = position.getY();
     }
 
     public int getX() {
-        return x;
+        return itemX;
     }
 
     public int getY() {
-        return y;
+        return itemY;
     }
+
 }
