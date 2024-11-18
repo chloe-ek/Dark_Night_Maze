@@ -7,11 +7,11 @@ import java.util.List;
 
 
 public class GameRenderer {
-    public static void drawEntity(GraphicsContext gc, int x, int y, int tileSize, Color color) {
+    public static void drawEntity(final GraphicsContext gc, final Position position, final int tileSize, final Color color) {
         gc.setFill(color);
-        gc.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+        gc.fillRect(position.getX() * tileSize, position.getY() * tileSize, tileSize, tileSize);
     }
-    public static void renderMaze(final GraphicsContext gc, Maze maze, int tileSize) {
+    public static void renderMaze(final GraphicsContext gc, final Maze maze, final int tileSize) {
         boolean[][] structure = maze.getStructure();
         for (int x = 0; x < structure.length; x++) {
             for (int y = 0; y < structure[0].length; y++) {
@@ -19,26 +19,26 @@ public class GameRenderer {
                 gc.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
             }
         }
-        gc.setFill(Color.RED);
-        gc.fillRect((structure.length - 2) * tileSize, (structure[0].length - 2) * tileSize, tileSize, tileSize);
     }
 
-    public static void renderPlayer(GraphicsContext gc, Player player, int tileSize, Flashlight flashlight) {
-        flashlight.setPosition(player.getX(), player.getY());
+    public static void renderPlayer(final GraphicsContext gc, final Player player, final int tileSize, final Flashlight flashlight) {
         flashlight.draw(gc, tileSize);
-        drawEntity(gc, player.getX(), player.getY(), tileSize, Color.BLUE);
+        drawEntity(gc, player.getPosition(), tileSize, Color.BLUE);
     }
 
-    public static void renderGhosts(GraphicsContext gc, List<Ghost> ghosts, int tileSize) {
+
+    public static void renderGhosts(final GraphicsContext gc, final List<Ghost> ghosts, final int tileSize) {
         for (Ghost ghost : ghosts) {
-            drawEntity(gc, ghost.getX(), ghost.getY(), tileSize, Color.WHITE);
+            drawEntity(gc, ghost.getPosition(), tileSize, Color.WHITE);
         }
     }
 
-    public static void renderItems(GraphicsContext gc, List<Item> items, int tileSize) {
+    public static void renderItems(final GraphicsContext gc, final List<Item> items, final int tileSize) {
         gc.setFill(Color.GREEN);
         for (Item item : items) {
-            gc.fillRect(item.getX() * tileSize + tileSize / 4, item.getY() * tileSize + tileSize / 4, tileSize / 2, tileSize / 2);
+            Position position = item.getPosition();
+            gc.fillRect(position.getX() * tileSize + tileSize / 4,
+                    position.getY() * tileSize + tileSize / 4, tileSize / 2, tileSize / 2);
         }
     }
 }
