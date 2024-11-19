@@ -7,14 +7,19 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameController extends Application {
+
     private static final int TILE_SIZE = 40;
     private static final int WIDTH = 20;
     private static final int HEIGHT = 20;
+    private static final int GHOST_COUNT = 5;
+    private static final int ITEM_COUNT = 3;
 
     private Player player;
     private Flashlight flashlight;
@@ -22,7 +27,7 @@ public class GameController extends Application {
     private List<Ghost> ghosts;
     private List<Item> items;
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         launch(args);
     }
 
@@ -36,15 +41,7 @@ public class GameController extends Application {
         initializeGame();
 
         Scene scene = new Scene(new StackPane(canvas));
-
-        scene.setOnKeyPressed(event -> {
-            switch (event.getCode()) {
-                case UP -> player.move(0, -1, maze.getStructure());
-                case DOWN -> player.move(0, 1, maze.getStructure());
-                case LEFT -> player.move(-1, 0, maze.getStructure());
-                case RIGHT -> player.move(1, 0, maze.getStructure());
-            }
-        });
+        scene.setOnKeyPressed(this::handlePlayerMovement);
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -61,13 +58,13 @@ public class GameController extends Application {
     private void initializeGame() {
         maze = new Maze(WIDTH, HEIGHT);
         player = new Player(1, 1);
-        flashlight = new Flashlight(3, javafx.scene.paint.Color.YELLOW, 0.5);
+        flashlight = new Flashlight(player,3, Color.YELLOW, 0.5);
         ghosts = new ArrayList<>();
         items = new ArrayList<>();
 
         maze.generateMaze();
-        generateGhosts(5);
-        generateItems(3);
+        generateGhosts(GHOST_COUNT);
+        generateItems(ITEM_COUNT);
     }
 
     private void updateGame() {
@@ -76,14 +73,23 @@ public class GameController extends Application {
         }
     }
 
-    private void render(GraphicsContext gc) {
+    private void render(final GraphicsContext gc) {
         GameRenderer.renderMaze(gc, maze, TILE_SIZE);
         GameRenderer.renderPlayer(gc, player, TILE_SIZE, flashlight);
         GameRenderer.renderGhosts(gc, ghosts, TILE_SIZE);
         GameRenderer.renderItems(gc, items, TILE_SIZE);
     }
 
-    private void generateGhosts(int count) {
+    private void handlePlayerMovement(final KeyEvent event) { // Refactored: Extracted player movement logic to a dedicated method for reusability
+        switch (event.getCode()) {
+            case UP -> player.move(0, -1, maze.getStructure());
+            case DOWN -> player.move(0, 1, maze.getStructure());
+            case LEFT -> player.move(-1, 0, maze.getStructure());
+            case RIGHT -> player.move(1, 0, maze.getStructure());
+        }
+    }
+
+    private void generateGhosts(final int count) {
         for (int i = 0; i < count; i++) {
             ghosts.add(new Ghost(maze.getRandomFreePosition(), 500 + (long) (Math.random() * 1000)));
         }
