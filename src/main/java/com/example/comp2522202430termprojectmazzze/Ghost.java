@@ -1,9 +1,12 @@
 package com.example.comp2522202430termprojectmazzze;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+
 import java.util.Random;
 
-public class Ghost implements Movement {
+public class Ghost implements Character {
     private static final String IMAGE_PATH = "/images/ghost.png";
     private Position position;
     private Image ghostImage;
@@ -23,36 +26,51 @@ public class Ghost implements Movement {
             this.ghostImage = null;
         }
     }
-
-
+    @Override
     public Position getPosition() {
         return position;
     }
 
-    public Image getGhostImage() {
-        return ghostImage;
-    }
 
-
-    // 랜덤 이동 메서드
-    public void randomMove(final boolean[][] maze) {
+    @Override
+    public void update(final boolean[][] maze) {
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastMoveTime >= moveInterval) {
-            int directionX = random.nextInt(3) - 1; // -1, 0, 1 중 하나
-            int directionY = random.nextInt(3) - 1;
-            move(directionX, directionY, maze);
+            Direction randomDirection = getRandomDirection();
+            move(randomDirection, maze);
             lastMoveTime = currentTime;
         }
     }
 
+
+
     @Override
-    public void move(final int directionX, final int directionY, final boolean[][] maze) {
-        int newX = position.getX() + directionX;
-        int newY = position.getY() + directionY;
+    public void move(Direction direction, boolean[][] maze) {
+        int newX = position.getX() + direction.getDirectionX();
+        int newY = position.getY() + direction.getDirectionY();
+
 
         if (newX >= 0 && newX < maze.length && newY >= 0 && newY < maze[0].length) {
-            this.position = new Position(newX, newY);
+            position = new Position(newX, newY);
         }
+    }
+
+    private Direction getRandomDirection() {
+        int dx = random.nextInt(3) - 1; // -1, 0, 1 중 하나
+        int dy = random.nextInt(3) - 1;
+
+        for (Direction direction : Direction.values()) {
+            if (direction.getDirectionX() == dx && direction.getDirectionY() == dy) {
+                return direction;
+            }
+        }
+        return Direction.UP;
+    }
+
+    @Override
+    public void render(GraphicsContext gc, int tileSize) {
+        gc.setFill(Color.WHITE);
+        gc.fillOval(position.getX() * tileSize, position.getY() * tileSize, tileSize, tileSize);
     }
 
 }
