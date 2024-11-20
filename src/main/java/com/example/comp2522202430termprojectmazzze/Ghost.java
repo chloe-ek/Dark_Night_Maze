@@ -68,9 +68,14 @@ public class Ghost implements Character {
     }
 
     @Override
-    public void render(GraphicsContext gc, int tileSize) {
-        gc.setFill(Color.WHITE);
-        gc.fillOval(position.getX() * tileSize, position.getY() * tileSize, tileSize, tileSize);
+    public void render(final GraphicsContext gc, final int tileSize) {
+        if (ghostImage != null) {
+            gc.drawImage(ghostImage, position.getX() * tileSize, position.getY() * tileSize, tileSize, tileSize);
+        } else {
+            gc.setFill(Color.WHITE);
+            gc.fillOval(position.getX() * tileSize, position.getY() * tileSize, tileSize, tileSize);
+        }
     }
+
 
 }
