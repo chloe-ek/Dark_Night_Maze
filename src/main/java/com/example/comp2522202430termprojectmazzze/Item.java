@@ -1,20 +1,29 @@
 package com.example.comp2522202430termprojectmazzze;
 
-public class Item {
-    private final int itemX;
-    private final int itemY;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
+public class Item implements Renderer {
+    private final Position position;
 
     public Item(final Position position) {
-        this.itemX = position.getX();
-        this.itemY = position.getY();
+        this.position = position;
+
     }
 
-    public int getX() {
-        return itemX;
+    public Position getPosition() {
+        return position;
     }
 
-    public int getY() {
-        return itemY;
+
+
+    @Override
+    public void render(GraphicsContext gc, int tileSize) {
+        gc.setFill(Color.GREEN);
+        gc.fillRect(position.getX() * tileSize + tileSize / 4,
+                position.getY() * tileSize + tileSize / 4,
+                tileSize / 2,
+                tileSize / 2);
     }
 
 }
