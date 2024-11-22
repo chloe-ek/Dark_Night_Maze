@@ -20,8 +20,8 @@ public class Item implements Renderer {
     @Override
     public void render(final GraphicsContext gc, final int tileSize) {
         gc.setFill(Color.GREEN);
-        gc.fillRect(position.getX() * tileSize + tileSize / 4,
-                position.getY() * tileSize + tileSize / 4,
+        gc.fillRect(position.getCoordinateX() * tileSize + tileSize / 4,
+                position.getCoordinateY() * tileSize + tileSize / 4,
                 tileSize / 2,
                 tileSize / 2);
     }

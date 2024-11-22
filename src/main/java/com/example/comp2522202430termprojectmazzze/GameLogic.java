@@ -35,6 +35,8 @@ public class GameLogic {
         for (Character character : characters) {
             character.update(maze.getStructure());
         }
+        items.removeIf(item -> player.getPosition().equals(item.getPosition()));
+
     }
 
     public void handleInput(final KeyEvent event) {
