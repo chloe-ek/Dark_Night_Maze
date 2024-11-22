@@ -8,11 +8,15 @@ public class GameRenderer {
 
     public void render(final GraphicsContext gc, final GameLogic gameLogic, int tileSize) {
         renderMaze(gc, gameLogic.getMaze(), tileSize);
+        // render the character
         for (Character character : gameLogic.getCharacters()) {
             character.render(gc, tileSize);
         }
+        // render the items
+        for (Item item : gameLogic.getItems()) {
+            item.render(gc, tileSize);
+        }
     }
-
 
     private void renderMaze(final GraphicsContext gc, final Maze maze, final int tileSize) {
         boolean[][] structure = maze.getStructure();

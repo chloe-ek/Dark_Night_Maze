@@ -9,16 +9,26 @@ public class GameLogic {
     private final Maze maze;
     private final Player player;
     private final List<Character> characters;
+    private final List<Item> items;
 
-    public GameLogic(int width, int height) {
+    public GameLogic(final int width, final int height) {
         maze = new Maze(width, height);
         maze.generateMaze();
+
         player = new Player(new Position(width / 2, height / 2));
         characters = new ArrayList<>();
         characters.add(player);
         for (int i = 0; i < 5; i++) {
             characters.add(new Ghost(maze.getRandomFreePosition(), 1000));
         }
+        items = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            items.add(new Item(maze.getRandomFreePosition()));
+        }
+    }
+
+    public List<Item> getItems() {
+        return items;
     }
 
     public void update() {
