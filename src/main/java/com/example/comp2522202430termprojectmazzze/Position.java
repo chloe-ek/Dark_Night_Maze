@@ -18,6 +18,12 @@ public class Position {
         return coordinateY;
     }
 
+    public double distanceTo(final Position other) {
+        int directionX = this.getCoordinateX() - other.getCoordinateX();
+        int directionY = this.getCoordinateY() - other.getCoordinateY();
+        return Math.sqrt(directionX * directionX + directionY * directionY);
+    }
+
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {

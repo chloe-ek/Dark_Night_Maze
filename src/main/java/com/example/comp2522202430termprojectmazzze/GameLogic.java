@@ -10,6 +10,8 @@ public class GameLogic {
     private final Player player;
     private final List<Character> characters;
     private final List<Item> items;
+    private final SoundManager soundManager = new SoundManager();
+    private static final double GHOST_DETECTION_RADIUS = 3.0;
 
     public GameLogic(final int width, final int height) {
         maze = new Maze(width, height);
@@ -32,8 +34,20 @@ public class GameLogic {
     }
 
     public void update() {
+        boolean ghostNearby = false;
         for (Character character : characters) {
             character.update(maze.getStructure());
+            if (character instanceof Ghost) {
+                double distance = player.getPosition().distanceTo(character.getPosition());
+                if (distance <= GHOST_DETECTION_RADIUS) {
+                    ghostNearby = true;
+                }
+            }
+        }
+        if (ghostNearby) {
+            soundManager.playGhostSound();
+        } else {
+            soundManager.stopGhostSound();
         }
         items.removeIf(item -> player.getPosition().equals(item.getPosition()));
 
@@ -53,7 +67,6 @@ public class GameLogic {
     public Maze getMaze() {
         return maze;
     }
-
 
     public List<Character> getCharacters() {
         return characters;
