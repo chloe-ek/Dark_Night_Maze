@@ -40,8 +40,8 @@ public class Player implements Character, Updatable {
 
     @Override
     public void move(final Direction direction, final boolean[][] maze) {
-        int newX = position.getX() + direction.getDirectionX();
-        int newY = position.getY() + direction.getDirectionY();
+        int newX = position.getCoordinateX() + direction.getDirectionX();
+        int newY = position.getCoordinateY() + direction.getDirectionY();
 
         if (direction == Direction.LEFT && currentDirection != Direction.LEFT) {
             currentDirection = Direction.LEFT;
@@ -64,10 +64,10 @@ public class Player implements Character, Updatable {
     @Override
     public void render(final GraphicsContext gc, final int tileSize) {
         if (playerImage != null) {
-            gc.drawImage(playerImage, position.getX() * tileSize, position.getY() * tileSize, tileSize, tileSize);
+            gc.drawImage(playerImage, position.getCoordinateX() * tileSize, position.getCoordinateY() * tileSize, tileSize, tileSize);
         } else {
             gc.setFill(Color.BLUE);
-            gc.fillRect(position.getX() * tileSize, position.getY() * tileSize, tileSize, tileSize);
+            gc.fillRect(position.getCoordinateX() * tileSize, position.getCoordinateY() * tileSize, tileSize, tileSize);
         }
     }
 

@@ -10,11 +10,24 @@ public class Position {
         this.coordinateY = coordinateY;
     }
 
-    public int getX() {
+    public int getCoordinateX() {
         return coordinateX;
     }
 
-    public int getY() {
+    public int getCoordinateY() {
         return coordinateY;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Position position = (Position) obj;
+
+        return getCoordinateX() == position.getCoordinateX() && getCoordinateY() == position.getCoordinateY();
     }
 }

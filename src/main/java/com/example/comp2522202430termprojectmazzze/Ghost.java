@@ -46,8 +46,8 @@ public class Ghost implements Character {
 
     @Override
     public void move(Direction direction, boolean[][] maze) {
-        int newX = position.getX() + direction.getDirectionX();
-        int newY = position.getY() + direction.getDirectionY();
+        int newX = position.getCoordinateX() + direction.getDirectionX();
+        int newY = position.getCoordinateY() + direction.getDirectionY();
 
 
         if (newX >= 0 && newX < maze.length && newY >= 0 && newY < maze[0].length) {
@@ -70,10 +70,10 @@ public class Ghost implements Character {
     @Override
     public void render(final GraphicsContext gc, final int tileSize) {
         if (ghostImage != null) {
-            gc.drawImage(ghostImage, position.getX() * tileSize, position.getY() * tileSize, tileSize, tileSize);
+            gc.drawImage(ghostImage, position.getCoordinateX() * tileSize, position.getCoordinateY() * tileSize, tileSize, tileSize);
         } else {
             gc.setFill(Color.WHITE);
-            gc.fillOval(position.getX() * tileSize, position.getY() * tileSize, tileSize, tileSize);
+            gc.fillOval(position.getCoordinateX() * tileSize, position.getCoordinateY() * tileSize, tileSize, tileSize);
         }
     }
 
