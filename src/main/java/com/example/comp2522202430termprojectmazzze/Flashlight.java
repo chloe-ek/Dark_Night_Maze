@@ -34,6 +34,11 @@ public class Flashlight {
         radius++;
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
+
 
     /**
      * Draws the flashlight effect on the canvas at the specified position.
