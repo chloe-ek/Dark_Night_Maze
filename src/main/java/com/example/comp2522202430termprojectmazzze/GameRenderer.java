@@ -2,6 +2,9 @@ package com.example.comp2522202430termprojectmazzze;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
 
 
 public class GameRenderer {
@@ -17,9 +20,28 @@ public class GameRenderer {
             item.render(gc, tileSize);
         }
         // render the flashlight effect
-        if (flashlight != null) {
-            flashlight.draw(gc, tileSize);
+        if (!gameLogic.isFullMapVisible() && flashlight != null) {
+            applyFlashlightEffect(gc, flashlight, tileSize);
         }
+    }
+
+    private void applyFlashlightEffect(final GraphicsContext gc,
+                                       final Flashlight flashlight, final int tileSize) {
+        // 플래시라이트 중심 계산
+        Player player = flashlight.getPlayer();
+        Position playerPos = player.getPosition();
+        double centerX = (playerPos.getCoordinateX() + 1) * tileSize; // 캐릭터 중심
+        double centerY = (playerPos.getCoordinateY() + 1) * tileSize; // 캐릭터 중심
+        double radius = flashlight.getRadius() * tileSize; // 플래시라이트 반경
+
+        RadialGradient gradient = new RadialGradient(
+                0, 0, centerX, centerY, radius, false, CycleMethod.NO_CYCLE,
+                new Stop(0.0, Color.TRANSPARENT),  // 중심부는 투명
+                new Stop(0.7, Color.rgb(0, 0, 0, 0.5)), // 중간은 반투명 검정
+                new Stop(1.0, Color.BLACK) // 끝부분은 완전 검정
+        );
+        gc.setFill(gradient);
+        gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
     }
 
     private void renderMaze(final GraphicsContext gc, final Maze maze, final int tileSize) {

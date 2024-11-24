@@ -4,6 +4,9 @@ import javafx.scene.input.KeyEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class GameLogic {
     private final Maze maze;
@@ -12,6 +15,7 @@ public class GameLogic {
     private final List<Item> items;
     private final SoundManager soundManager = new SoundManager();
     private static final double GHOST_DETECTION_RADIUS = 3.0;
+    private boolean isFullMapVisible = false;
 
     public GameLogic(final int width, final int height) {
         maze = new Maze(width, height);
@@ -34,6 +38,16 @@ public class GameLogic {
     }
 
     public void update() {
+
+        items.removeIf(item -> {
+            if (player.getPosition().equals(item.getPosition())) {
+                player.collectItem();
+                checkFullMapVisibility(); // 아이템 수집 후 상태 확인
+                return true; // 아이템 제거
+            }
+            return false;
+        });
+
         boolean ghostNearby = false;
         for (Character character : characters) {
             character.update(maze.getStructure());
@@ -59,6 +73,29 @@ public class GameLogic {
             player.move(direction, maze.getStructure());
         }
     }
+
+
+    private void checkFullMapVisibility() {
+        if (player.getCollectedItems() >= 5 && !isFullMapVisible) {
+            enableFullMapVisibility();
+        }
+    }
+
+    private void enableFullMapVisibility() {
+        isFullMapVisible = true;
+
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                isFullMapVisible = false;
+            }
+        }, 2000);
+    }
+
+    public boolean isFullMapVisible() {
+        return isFullMapVisible;
+    }
+
 
     public Player getPlayer() {
         return player;
