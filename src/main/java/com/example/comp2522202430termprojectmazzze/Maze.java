@@ -2,16 +2,26 @@ package com.example.comp2522202430termprojectmazzze;
 
 import java.util.Random;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+
+
 class Maze {
     private boolean[][] structure;
     private final int width;
     private final int height;
     private final Random random = new Random();
 
+    private final Image wallImage;
+    private final Image tileImage;
+
     Maze(final int width, final int height) {
         this.width = width;
         this.height = height;
         structure = new boolean[width][height];
+
+        wallImage = new Image(getClass().getResourceAsStream("/images/wall.png"));
+        tileImage = new Image(getClass().getResourceAsStream("/images/tile.png"));
     }
 
     public void generateMaze() {
@@ -192,5 +202,19 @@ class Maze {
             y = 1 + random.nextInt(height - 2);
         } while (structure[x][y]);
         return new Position(x, y);
+    }
+
+    public void render(final GraphicsContext gc, final int tileSize) {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (structure[x][y]) {
+                    // 벽일 경우
+                    gc.drawImage(wallImage, x * tileSize, y * tileSize, tileSize, tileSize);
+                } else {
+                    // 길일 경우
+                    gc.drawImage(tileImage, x * tileSize, y * tileSize, tileSize, tileSize);
+                }
+            }
+        }
     }
 }
