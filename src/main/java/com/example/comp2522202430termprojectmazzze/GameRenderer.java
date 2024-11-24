@@ -12,7 +12,14 @@ public class GameRenderer {
     public void render(final GraphicsContext gc, final GameLogic gameLogic, final int tileSize, final Flashlight flashlight) {
         renderMaze(gc, gameLogic.getMaze(), tileSize);
         // render the character
+
         for (Character character : gameLogic.getCharacters()) {
+            if (character instanceof Player && !((Player) character).isAlive()) {
+                // 플레이어가 죽었으면 게임 오버 메시지 표시
+                gc.setFill(Color.RED);
+                gc.fillText("Game Over", gc.getCanvas().getWidth() / 2 - 50, gc.getCanvas().getHeight() / 2);
+                return; // 렌더링 종료
+            }
             character.render(gc, tileSize);
         }
         // render the items
@@ -36,8 +43,8 @@ public class GameRenderer {
 
         RadialGradient gradient = new RadialGradient(
                 0, 0, centerX, centerY, radius, false, CycleMethod.NO_CYCLE,
-                new Stop(0.0, Color.TRANSPARENT),  // 중심부는 투명
-                new Stop(0.7, Color.rgb(0, 0, 0, 0.5)), // 중간은 반투명 검정
+                new Stop(0.0, Color.LIGHTYELLOW),  // 중심부는 투명
+                new Stop(0.4, Color.rgb(0, 0, 0, 0.1)), // 중간은 반투명 검정
                 new Stop(1.0, Color.BLACK) // 끝부분은 완전 검정
         );
         gc.setFill(gradient);

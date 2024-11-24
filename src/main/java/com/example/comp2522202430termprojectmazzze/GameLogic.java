@@ -38,6 +38,11 @@ public class GameLogic {
     }
 
     public void update() {
+        if (player.isAlive()) {
+            for (Character character : characters) {
+                character.update(maze.getStructure());
+            }
+        }
 
         items.removeIf(item -> {
             if (player.getPosition().equals(item.getPosition())) {
@@ -47,6 +52,16 @@ public class GameLogic {
             }
             return false;
         });
+// 고스트와 충돌 확인
+        for (Character character : characters) {
+            if (character instanceof Ghost) {
+                if (player.getPosition().equals(character.getPosition())) {
+                    player.die();
+                    handlePlayerDeath();
+                    break;
+                }
+            }
+        }
 
         boolean ghostNearby = false;
         for (Character character : characters) {
@@ -73,6 +88,11 @@ public class GameLogic {
             player.move(direction, maze.getStructure());
         }
     }
+
+    private void handlePlayerDeath() {
+        System.out.println("Game Over! The player has died.");
+    }
+
 
 
     private void checkFullMapVisibility() {

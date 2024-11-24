@@ -11,6 +11,16 @@ public class Player implements Character, Updatable {
     private Position position;
     private Image playerImage;
     private Direction currentDirection;
+    private int collectedItems = 0;
+    private boolean isAlive = true;
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void die() {
+        isAlive = false;
+    }
 
     public Player(final Position startPosition) {
         this.position = startPosition;
@@ -31,6 +41,13 @@ public class Player implements Character, Updatable {
             e.printStackTrace();
             this.playerImage = null;
         }
+    }
+    public void collectItem() {
+        collectedItems++;
+    }
+
+    public int getCollectedItems() {
+        return collectedItems;
     }
 
     @Override
