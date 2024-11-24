@@ -54,6 +54,7 @@ public class GameLogic {
         return maze;
     }
 
+
     public List<Character> getCharacters() {
         return characters;
     }

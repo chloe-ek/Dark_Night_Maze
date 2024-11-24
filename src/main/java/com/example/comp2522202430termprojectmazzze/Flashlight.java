@@ -2,7 +2,7 @@ package com.example.comp2522202430termprojectmazzze;
 
 
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+import javafx.scene.paint.*;
 
 
 public class Flashlight {
@@ -42,16 +42,37 @@ public class Flashlight {
      * @param tileSize The size of each tile in pixels
      */
     public void draw(final GraphicsContext gc, final int tileSize) {
+        double adjustedRadius = radius * tileSize;
+        double playerX = player.getPosition().getCoordinateX() * tileSize;
+        double playerY = player.getPosition().getCoordinateY() * tileSize;
+
+        // Define the radial gradient for the flashlight effect
+        RadialGradient gradient = new RadialGradient(
+                0,  // Focus angle
+                0,  // Focus distance
+                playerX + tileSize / 2,  // Center X
+                playerY + tileSize / 2,  // Center Y
+                adjustedRadius,          // Radius
+                false,                   // Proportional
+                CycleMethod.NO_CYCLE,    // No repetition of gradient
+                new Stop(0, color),      // Center color
+                new Stop(1, Color.BLACK) // Edge color
+        );
+
+        // Save current settings
+        Paint originalFill = gc.getFill();
         double originalAlpha = gc.getGlobalAlpha();
-        gc.setFill(color);
+
+        // Apply the gradient
+        gc.setFill(gradient);
         gc.setGlobalAlpha(opacity);
 
-        int playerX = player.getPosition().getX();
-        int playerY = player.getPosition().getY();
+        // Draw the flashlight effect
+        gc.fillOval(playerX - adjustedRadius, playerY - adjustedRadius,
+                adjustedRadius * 2, adjustedRadius * 2);
 
-        gc.fillOval((playerX - radius) * tileSize, (playerY - radius) * tileSize,
-                radius * 2 * tileSize, radius * 2 * tileSize);
-
+        // Restore original settings
+        gc.setFill(originalFill);
         gc.setGlobalAlpha(originalAlpha);
     }
 }

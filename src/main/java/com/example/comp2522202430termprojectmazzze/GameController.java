@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 
@@ -17,6 +18,8 @@ public class GameController extends Application {
 
     private GameLogic gameLogic;
     private GameRenderer gameRenderer;
+    private Flashlight flashlight;
+
 
     @Override
     public void start(final Stage primaryStage) {
@@ -25,8 +28,15 @@ public class GameController extends Application {
         Canvas canvas = new Canvas(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
+        // Initialize game logic and renderer
+
         gameLogic = new GameLogic(WIDTH, HEIGHT);
         gameRenderer = new GameRenderer();
+
+        // Initialize flashlight
+        Player player = gameLogic.getPlayer();
+        flashlight = new Flashlight(player, 3, Color.LIGHTYELLOW, 0.5);
+
 
         Scene scene = new Scene(new StackPane(canvas));
         scene.setOnKeyPressed(gameLogic::handleInput);
@@ -37,8 +47,8 @@ public class GameController extends Application {
         new AnimationTimer() {
             @Override
             public void handle(final long now) {
-                gameLogic.update();
-                gameRenderer.render(gc, gameLogic, TILE_SIZE);
+                gameLogic.update(); // Update game logic
+                gameRenderer.render(gc, gameLogic, TILE_SIZE, flashlight);
             }
         }.start();
     }
