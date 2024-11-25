@@ -38,10 +38,12 @@ public class GameLogic {
     }
 
     public void update() {
-        if (player.isAlive()) {
-            for (Character character : characters) {
+        if (!player.isAlive()) {
+            return;
+        }
+
+        for (Character character : characters) {
                 character.update(maze.getStructure());
-            }
         }
 
         items.removeIf(item -> {

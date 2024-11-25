@@ -9,26 +9,41 @@ import javafx.scene.paint.Stop;
 
 public class GameRenderer {
 
+    private long deathAnimationStartTime = 0;
+
+
     public void render(final GraphicsContext gc, final GameLogic gameLogic, final int tileSize, final Flashlight flashlight) {
         renderMaze(gc, gameLogic.getMaze(), tileSize);
-        // render the character
 
         for (Character character : gameLogic.getCharacters()) {
-            if (character instanceof Player && !((Player) character).isAlive()) {
-                // 플레이어가 죽었으면 게임 오버 메시지 표시
-                gc.setFill(Color.RED);
-                gc.fillText("Game Over", gc.getCanvas().getWidth() / 2 - 50, gc.getCanvas().getHeight() / 2);
-                return; // 렌더링 종료
+            if (character instanceof Player player) {
+                if (!player.isAlive()) {
+                    if (deathAnimationStartTime == 0) {
+                        deathAnimationStartTime = System.currentTimeMillis(); // 애니메이션 시작 시간
+                    }
+                    renderDeathState(gc, player, tileSize);
+                    return; // 게임 오버 상태이므로 나머지 렌더링 생략
+                }
             }
             character.render(gc, tileSize);
         }
-        // render the items
+
         for (Item item : gameLogic.getItems()) {
             item.render(gc, tileSize);
         }
-        // render the flashlight effect
+
         if (!gameLogic.isFullMapVisible() && flashlight != null) {
             applyFlashlightEffect(gc, flashlight, tileSize);
+        }
+    }
+    private void renderDeathState(final GraphicsContext gc, final Player player, final int tileSize) {
+        long elapsedTime = System.currentTimeMillis() - deathAnimationStartTime;
+
+        if (elapsedTime < 2000) { // 2초 동안 죽음 상태 렌더링
+            player.render(gc, tileSize); // dead.png 이미지 렌더링
+        } else {
+            gc.setFill(Color.RED);
+            gc.fillText("Game Over", gc.getCanvas().getWidth() / 2 - 50, gc.getCanvas().getHeight() / 2);
         }
     }
 

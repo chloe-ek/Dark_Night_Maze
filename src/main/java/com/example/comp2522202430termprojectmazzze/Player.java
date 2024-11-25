@@ -8,25 +8,22 @@ import javafx.scene.image.Image;
 public class Player implements Character, Updatable {
     private static final String IMAGE_PATH_LEFT = "/images/redhoodie_left.png";
     private static final String IMAGE_PATH = "/images/redhoodie.png";
+    private static final String DEAD_IMAGE_PATH = "/images/dead.png"; // 죽음 상태 이미지
+
     private Position position;
     private Image playerImage;
+    private Image deadImage;
     private Direction currentDirection;
     private int collectedItems = 0;
     private boolean isAlive = true;
 
-    public boolean isAlive() {
-        return isAlive;
-    }
-
-    public void die() {
-        isAlive = false;
-    }
 
     public Player(final Position startPosition) {
         this.position = startPosition;
         this.currentDirection = Direction.RIGHT;
 
         loadImage(IMAGE_PATH);
+        loadDeadImage();
     }
 
     private void loadImage(final String imagePath) {
@@ -42,6 +39,33 @@ public class Player implements Character, Updatable {
             this.playerImage = null;
         }
     }
+
+    private void loadDeadImage() {
+        try {
+            var resourceUrl = getClass().getResource(DEAD_IMAGE_PATH);
+            if (resourceUrl == null) {
+                throw new NullPointerException("Resource not found: " + DEAD_IMAGE_PATH);
+            }
+            this.deadImage = new Image(resourceUrl.toExternalForm());
+        } catch (Exception e) {
+            System.out.println("Failed to load dead image: " + DEAD_IMAGE_PATH);
+            e.printStackTrace();
+            this.deadImage = null;
+        }
+    }
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public void die() {
+        isAlive = false;
+    }
+
+    public Image getCurrentImage() {
+        return isAlive ? playerImage : deadImage; // 상태에 따라 이미지 반환
+    }
+
+
     public void collectItem() {
         collectedItems++;
     }
@@ -57,6 +81,9 @@ public class Player implements Character, Updatable {
 
     @Override
     public void move(final Direction direction, final boolean[][] maze) {
+        if (!isAlive) {
+            return;
+        }
         int newX = position.getCoordinateX() + direction.getDirectionX();
         int newY = position.getCoordinateY() + direction.getDirectionY();
 
@@ -78,10 +105,12 @@ public class Player implements Character, Updatable {
                 && !maze[targetX][targetY];
     }
 
+
     @Override
     public void render(final GraphicsContext gc, final int tileSize) {
-        if (playerImage != null) {
-            gc.drawImage(playerImage, position.getCoordinateX() * tileSize, position.getCoordinateY() * tileSize, tileSize, tileSize);
+        Image imageToRender = getCurrentImage();
+        if (imageToRender != null) {
+            gc.drawImage(imageToRender, position.getCoordinateX() * tileSize, position.getCoordinateY() * tileSize, tileSize, tileSize);
         } else {
             gc.setFill(Color.BLUE);
             gc.fillRect(position.getCoordinateX() * tileSize, position.getCoordinateY() * tileSize, tileSize, tileSize);
