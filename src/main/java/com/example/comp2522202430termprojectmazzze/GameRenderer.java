@@ -11,9 +11,14 @@ public class GameRenderer {
 
     private long deathAnimationStartTime = 0;
 
-
     public void render(final GraphicsContext gc, final GameLogic gameLogic, final int tileSize, final Flashlight flashlight) {
         renderMaze(gc, gameLogic.getMaze(), tileSize);
+
+        if (gameLogic.isGameWon()) {
+            renderWinScreen(gc);
+            return;
+        }
+
 
         for (Character character : gameLogic.getCharacters()) {
             if (character instanceof Player player) {
@@ -35,6 +40,11 @@ public class GameRenderer {
         if (!gameLogic.isFullMapVisible() && flashlight != null) {
             applyFlashlightEffect(gc, flashlight, tileSize);
         }
+    }
+
+    private void renderWinScreen(GraphicsContext gc) {
+        gc.setFill(Color.GREEN);
+        gc.fillText("You Win!", gc.getCanvas().getWidth() / 2 - 50, gc.getCanvas().getHeight() / 2);
     }
     private void renderDeathState(final GraphicsContext gc, final Player player, final int tileSize) {
         long elapsedTime = System.currentTimeMillis() - deathAnimationStartTime;

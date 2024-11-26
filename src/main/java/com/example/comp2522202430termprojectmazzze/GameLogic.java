@@ -16,6 +16,8 @@ public class GameLogic {
     private final SoundManager soundManager = new SoundManager();
     private static final double GHOST_DETECTION_RADIUS = 3.0;
     private boolean isFullMapVisible = false;
+    private boolean isGameWon = false;
+
 
     public GameLogic(final int width, final int height) {
         maze = new Maze(width, height);
@@ -38,7 +40,15 @@ public class GameLogic {
     }
 
     public void update() {
-        if (!player.isAlive()) {
+        if (!player.isAlive() || isGameWon) {
+            return;
+        }
+
+        Position exitPosition = maze.getExitPosition();
+
+        if (player.getPosition().equals(maze.getExitPosition())) {
+            isGameWon = true;
+            handleGameWin();
             return;
         }
 
@@ -54,7 +64,8 @@ public class GameLogic {
             }
             return false;
         });
-// 고스트와 충돌 확인
+
+
         for (Character character : characters) {
             if (character instanceof Ghost) {
                 if (player.getPosition().equals(character.getPosition())) {
@@ -91,6 +102,10 @@ public class GameLogic {
         }
     }
 
+    private void handleGameWin() {
+        System.out.println("You Win! The player has reached the exit.");
+    }
+
     private void handlePlayerDeath() {
         System.out.println("Game Over! The player has died.");
     }
@@ -118,6 +133,9 @@ public class GameLogic {
         return isFullMapVisible;
     }
 
+    public boolean isGameWon() {
+        return isGameWon;
+    }
 
     public Player getPlayer() {
         return player;

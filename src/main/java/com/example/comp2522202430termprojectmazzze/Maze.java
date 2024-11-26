@@ -4,6 +4,7 @@ import java.util.Random;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 
 class Maze {
@@ -14,6 +15,8 @@ class Maze {
 
     private final Image wallImage;
     private final Image tileImage;
+
+    private Position exitPosition;
 
     Maze(final int width, final int height) {
         this.width = width;
@@ -153,6 +156,7 @@ class Maze {
         } while (!isValidExit(exitX, exitY));
 
         structure[exitX][exitY] = false;
+        exitPosition = new Position(exitX, exitY);
         if (exitX == 0) {
             structure[1][exitY] = false;
         } else if (exitX == width - 1) {
@@ -180,6 +184,11 @@ class Maze {
         }
         return false;
     }
+
+    public Position getExitPosition() {
+        return exitPosition;
+    }
+
 
     private void shuffleArray(final int[] array) {
         for (int i = array.length - 1; i > 0; i--) {
@@ -216,5 +225,10 @@ class Maze {
                 }
             }
         }
+        if (exitPosition != null) {
+            gc.setFill(Color.BEIGE);
+            gc.fillRect(exitPosition.getCoordinateX() * tileSize, exitPosition.getCoordinateY() * tileSize, tileSize, tileSize);
+        }
     }
+
 }
