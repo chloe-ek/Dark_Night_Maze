@@ -4,8 +4,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 
-import java.util.Objects;
-
 
 public class Item implements Renderer {
     private final Position position;
@@ -14,10 +12,10 @@ public class Item implements Renderer {
 
     public Item(final Position position) {
         this.position = position;
-        this.itemImage = new Image(Objects.requireNonNull(getClass().
-                getResourceAsStream("/images/item.png")));
+        this.itemImage = ImageLoader.loadImage("/images/item.png");
 
     }
+
 
     public Position getPosition() {
         return position;

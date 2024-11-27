@@ -4,12 +4,13 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class Ghost implements Character {
     private static final String IMAGE_PATH = "/images/ghost.png";
     private Position position;
-    private Image ghostImage;
+    private final Image ghostImage;
     private final Random random = new Random();
     private long lastMoveTime = 0;
     private final long moveInterval;
@@ -18,14 +19,9 @@ public class Ghost implements Character {
     public Ghost(final Position startPosition, final long moveInterval) {
         this.position = startPosition;
         this.moveInterval = moveInterval;
-
-        try {
-            this.ghostImage = new Image(getClass().getResource(IMAGE_PATH).toExternalForm());
-        } catch (NullPointerException e) {
-            System.out.println("Ghost image not found");
-            this.ghostImage = null;
-        }
+        this.ghostImage = ImageLoader.loadImage(IMAGE_PATH);
     }
+
     @Override
     public Position getPosition() {
         return position;
@@ -45,7 +41,7 @@ public class Ghost implements Character {
 
 
     @Override
-    public void move(Direction direction, boolean[][] maze) {
+    public void move(final Direction direction, final boolean[][] maze) {
         int newX = position.getCoordinateX() + direction.getDirectionX();
         int newY = position.getCoordinateY() + direction.getDirectionY();
 

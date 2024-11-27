@@ -4,6 +4,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 
+import java.util.Objects;
+
 
 public class Player implements Character, Updatable {
     private static final String IMAGE_PATH_LEFT = "/images/redhoodie_left.png";
@@ -27,31 +29,11 @@ public class Player implements Character, Updatable {
     }
 
     private void loadImage(final String imagePath) {
-        try {
-            var resourceUrl = getClass().getResource(imagePath);
-            if (resourceUrl == null) {
-                throw new NullPointerException("Resource not found: " + imagePath);
-            }
-            this.playerImage = new Image(resourceUrl.toExternalForm());
-        } catch (Exception e) {
-            System.out.println("Failed to load player image: " + imagePath);
-            e.printStackTrace();
-            this.playerImage = null;
-        }
+        this.playerImage = ImageLoader.loadImage(imagePath);
     }
 
     private void loadDeadImage() {
-        try {
-            var resourceUrl = getClass().getResource(DEAD_IMAGE_PATH);
-            if (resourceUrl == null) {
-                throw new NullPointerException("Resource not found: " + DEAD_IMAGE_PATH);
-            }
-            this.deadImage = new Image(resourceUrl.toExternalForm());
-        } catch (Exception e) {
-            System.out.println("Failed to load dead image: " + DEAD_IMAGE_PATH);
-            e.printStackTrace();
-            this.deadImage = null;
-        }
+        this.deadImage = ImageLoader.loadImage(DEAD_IMAGE_PATH);
     }
     public boolean isAlive() {
         return isAlive;

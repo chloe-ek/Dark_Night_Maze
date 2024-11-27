@@ -11,7 +11,8 @@ public class GameRenderer {
 
     private long deathAnimationStartTime = 0;
 
-    public void render(final GraphicsContext gc, final GameLogic gameLogic, final int tileSize, final Flashlight flashlight) {
+    public void render(final GraphicsContext gc, final GameLogic gameLogic,
+                       final int tileSize, final Flashlight flashlight) {
         renderMaze(gc, gameLogic.getMaze(), tileSize);
 
         if (gameLogic.isGameWon()) {
@@ -42,7 +43,7 @@ public class GameRenderer {
         }
     }
 
-    private void renderWinScreen(GraphicsContext gc) {
+    private void renderWinScreen(final GraphicsContext gc) {
         gc.setFill(Color.GREEN);
         gc.fillText("You Win!", gc.getCanvas().getWidth() / 2 - 50, gc.getCanvas().getHeight() / 2);
     }
@@ -77,21 +78,7 @@ public class GameRenderer {
     }
 
     private void renderMaze(final GraphicsContext gc, final Maze maze, final int tileSize) {
-        boolean[][] structure = maze.getStructure();
-
-        for (int x = 0; x < structure.length; x++) {
-            for (int y = 0; y < structure[0].length; y++) {
-                if (structure[x][y]) {
-                    gc.setFill(Color.DARKGREY);
-                } else {
-                    gc.setFill(javafx.scene.paint.Color.BLACK);
-                }
-                gc.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
-            }
-            maze.render(gc, tileSize);
-
-
-        }
+        maze.render(gc, tileSize);
     }
 
 }
