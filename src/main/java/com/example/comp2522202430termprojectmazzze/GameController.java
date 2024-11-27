@@ -11,14 +11,16 @@ import javafx.stage.Stage;
 
 
 public class GameController extends Application {
+    private static final String SAVE_FILE = "game_save.dat";
 
     private static final int TILE_SIZE = 40;
-    private static final int WIDTH = 20;
+    private static final int WIDTH = 25;
     private static final int HEIGHT = 20;
 
     private GameLogic gameLogic;
     private GameRenderer gameRenderer;
     private Flashlight flashlight;
+
 
 
     @Override

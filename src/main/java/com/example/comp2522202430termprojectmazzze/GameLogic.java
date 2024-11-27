@@ -1,23 +1,32 @@
 package com.example.comp2522202430termprojectmazzze;
 
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class GameLogic {
+public class GameLogic implements Serializable {
+    private static final double GHOST_DETECTION_RADIUS = 3.0;
+    private final transient Image itemImage = ImageLoader.loadImage("/images/item.png");
+
+
     private final Maze maze;
     private final Player player;
     private final List<Character> characters;
     private final List<Item> items;
-    private final SoundManager soundManager = new SoundManager();
-    private static final double GHOST_DETECTION_RADIUS = 3.0;
     private boolean isFullMapVisible = false;
     private boolean isGameWon = false;
+    private final transient SoundManager soundManager = new SoundManager();
 
+    private Object readResolve() {
+        // transient 필드 초기화
+        return this;
+    }
 
     public GameLogic(final int width, final int height) {
         maze = new Maze(width, height);
@@ -37,6 +46,9 @@ public class GameLogic {
 
     public List<Item> getItems() {
         return items;
+    }
+    public Image getItemImage() {
+        return itemImage;
     }
 
     public void update() {

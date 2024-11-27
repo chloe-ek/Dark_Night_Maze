@@ -1,13 +1,32 @@
 package com.example.comp2522202430termprojectmazzze;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
+import javafx.scene.text.Font;
 
 
 public class GameRenderer {
+
+    public void renderHUD(final GraphicsContext gc, final Player player, final Image itemImage) {
+        // HUD 시작 좌표
+        double hudStartX = 10; // 왼쪽 여백
+        double hudStartY = 10; // 상단 여백
+        double hudIconSize = 40; // 아이템 아이콘 크기
+
+        // 아이템 이미지 렌더링
+        gc.drawImage(itemImage, hudStartX, hudStartY, hudIconSize, hudIconSize);
+
+        // 아이템 개수 텍스트 렌더링
+        int collectedItems = player.getCollectedItems();
+        gc.setFill(Color.WHITE);
+        gc.setFont(new Font("Comic Sans MS", 20));
+        gc.fillText("x" + collectedItems, hudStartX + hudIconSize + 10, hudStartY + hudIconSize - 5);
+    }
+
 
     private long deathAnimationStartTime = 0;
 
@@ -41,6 +60,8 @@ public class GameRenderer {
         if (!gameLogic.isFullMapVisible() && flashlight != null) {
             applyFlashlightEffect(gc, flashlight, tileSize);
         }
+        renderHUD(gc, gameLogic.getPlayer(), gameLogic.getItemImage());
+
     }
 
     private void renderWinScreen(final GraphicsContext gc) {
