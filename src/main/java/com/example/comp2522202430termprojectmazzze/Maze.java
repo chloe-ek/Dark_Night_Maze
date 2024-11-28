@@ -1,5 +1,7 @@
 package com.example.comp2522202430termprojectmazzze;
 
+import java.io.Serializable;
+import java.util.Objects;
 import java.util.Random;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -7,14 +9,15 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 
-class Maze {
+class Maze implements Serializable {
+    private static final long serialVersionUID = 1L;
     private boolean[][] structure;
     private final int width;
     private final int height;
     private final Random random = new Random();
 
-    private final Image wallImage;
-    private final Image tileImage;
+    private transient Image wallImage;
+    private transient Image tileImage;
 
     private Position exitPosition;
 
@@ -23,8 +26,17 @@ class Maze {
         this.height = height;
         structure = new boolean[width][height];
 
-        wallImage = new Image(getClass().getResourceAsStream("/images/wall.png"));
-        tileImage = new Image(getClass().getResourceAsStream("/images/tile.png"));
+        wallImage = new Image(Objects.requireNonNull(getClass().
+                getResourceAsStream("/images/wall.png")));
+        tileImage = new Image(Objects.requireNonNull(getClass().
+                getResourceAsStream("/images/tile.png")));
+    }
+    private Object readResolve() {
+        wallImage = new Image(Objects.requireNonNull(getClass().
+                getResourceAsStream("/images/wall.png")));
+        tileImage = new Image(Objects.requireNonNull(getClass().
+                getResourceAsStream("/images/tile.png")));
+        return this;
     }
 
     public void generateMaze() {
@@ -227,7 +239,8 @@ class Maze {
         }
         if (exitPosition != null) {
             gc.setFill(Color.BEIGE);
-            gc.fillRect(exitPosition.getCoordinateX() * tileSize, exitPosition.getCoordinateY() * tileSize, tileSize, tileSize);
+            gc.fillRect(exitPosition.getCoordinateX() * tileSize,
+                    exitPosition.getCoordinateY() * tileSize, tileSize, tileSize);
         }
     }
 

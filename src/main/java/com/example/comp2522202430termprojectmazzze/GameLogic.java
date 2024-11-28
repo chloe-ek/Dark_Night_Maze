@@ -12,7 +12,7 @@ import java.util.TimerTask;
 
 public class GameLogic implements Serializable {
     private static final double GHOST_DETECTION_RADIUS = 3.0;
-    private final transient Image itemImage = ImageLoader.loadImage("/images/item.png");
+    private transient Image itemImage = ImageLoader.loadImage("/images/item.png");
 
 
     private final Maze maze;
@@ -21,10 +21,12 @@ public class GameLogic implements Serializable {
     private final List<Item> items;
     private boolean isFullMapVisible = false;
     private boolean isGameWon = false;
-    private final transient SoundManager soundManager = new SoundManager();
+    private transient SoundManager soundManager;
 
     private Object readResolve() {
-        // transient 필드 초기화
+        System.out.println("readResolve called: Reinitializing transient fields.");
+        soundManager = new SoundManager();
+        itemImage = ImageLoader.loadImage("/images/item.png");
         return this;
     }
 
@@ -42,11 +44,21 @@ public class GameLogic implements Serializable {
         for (int i = 0; i < 5; i++) {
             items.add(new Item(maze.getRandomFreePosition()));
         }
+        soundManager = new SoundManager();
+    }
+
+    public SoundManager getSoundManager() {
+        return soundManager;
+    }
+
+    public void setSoundManager(final SoundManager soundManager) {
+        this.soundManager = soundManager;
     }
 
     public List<Item> getItems() {
         return items;
     }
+
     public Image getItemImage() {
         return itemImage;
     }
@@ -56,36 +68,10 @@ public class GameLogic implements Serializable {
             return;
         }
 
-        Position exitPosition = maze.getExitPosition();
-
         if (player.getPosition().equals(maze.getExitPosition())) {
             isGameWon = true;
             handleGameWin();
             return;
-        }
-
-        for (Character character : characters) {
-                character.update(maze.getStructure());
-        }
-
-        items.removeIf(item -> {
-            if (player.getPosition().equals(item.getPosition())) {
-                player.collectItem();
-                checkFullMapVisibility(); // 아이템 수집 후 상태 확인
-                return true; // 아이템 제거
-            }
-            return false;
-        });
-
-
-        for (Character character : characters) {
-            if (character instanceof Ghost) {
-                if (player.getPosition().equals(character.getPosition())) {
-                    player.die();
-                    handlePlayerDeath();
-                    break;
-                }
-            }
         }
 
         boolean ghostNearby = false;
@@ -98,13 +84,34 @@ public class GameLogic implements Serializable {
                 }
             }
         }
-        if (ghostNearby) {
-            soundManager.playGhostSound();
-        } else {
-            soundManager.stopGhostSound();
-        }
-        items.removeIf(item -> player.getPosition().equals(item.getPosition()));
 
+        if (soundManager != null) {
+            if (ghostNearby) {
+                soundManager.playGhostSound();
+            } else {
+                soundManager.stopGhostSound();
+            }
+        } else {
+            System.err.println("Warning: SoundManager is null in update().");
+        }
+
+        items.removeIf(item -> {
+            if (player.getPosition().equals(item.getPosition())) {
+                player.collectItem();
+                checkFullMapVisibility();
+                return true;
+            }
+            return false;
+        });
+
+        // Ghost와 충돌 확인
+        for (Character character : characters) {
+            if (character instanceof Ghost && player.getPosition().equals(character.getPosition())) {
+                player.die();
+                handlePlayerDeath();
+                break;
+            }
+        }
     }
 
     public void handleInput(final KeyEvent event) {
@@ -160,6 +167,8 @@ public class GameLogic implements Serializable {
     public List<Character> getCharacters() {
         return characters;
     }
+
+
 
 
 }

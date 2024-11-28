@@ -4,17 +4,18 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
 
-import java.util.Objects;
+import java.io.Serializable;
 
+public class Player implements Character, Updatable, Serializable {
+    private static final long serialVersionUID = 1L;
 
-public class Player implements Character, Updatable {
     private static final String IMAGE_PATH_LEFT = "/images/redhoodie_left.png";
     private static final String IMAGE_PATH = "/images/redhoodie.png";
     private static final String DEAD_IMAGE_PATH = "/images/dead.png"; // 죽음 상태 이미지
 
     private Position position;
-    private Image playerImage;
-    private Image deadImage;
+    private transient Image playerImage;
+    private transient Image deadImage;
     private Direction currentDirection;
     private int collectedItems = 0;
     private boolean isAlive = true;
@@ -26,6 +27,12 @@ public class Player implements Character, Updatable {
 
         loadImage(IMAGE_PATH);
         loadDeadImage();
+    }
+
+    private Object readResolve() {
+        loadImage(IMAGE_PATH);
+        loadDeadImage();
+        return this;
     }
 
     private void loadImage(final String imagePath) {
@@ -92,10 +99,12 @@ public class Player implements Character, Updatable {
     public void render(final GraphicsContext gc, final int tileSize) {
         Image imageToRender = getCurrentImage();
         if (imageToRender != null) {
-            gc.drawImage(imageToRender, position.getCoordinateX() * tileSize, position.getCoordinateY() * tileSize, tileSize, tileSize);
+            gc.drawImage(imageToRender, position.getCoordinateX() * tileSize,
+                    position.getCoordinateY() * tileSize, tileSize, tileSize);
         } else {
             gc.setFill(Color.BLUE);
-            gc.fillRect(position.getCoordinateX() * tileSize, position.getCoordinateY() * tileSize, tileSize, tileSize);
+            gc.fillRect(position.getCoordinateX() * tileSize,
+                    position.getCoordinateY() * tileSize, tileSize, tileSize);
         }
     }
 

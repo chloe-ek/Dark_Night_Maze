@@ -4,13 +4,13 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-import java.util.Objects;
+import java.io.Serializable;
 import java.util.Random;
 
-public class Ghost implements Character {
+public class Ghost implements Character, Serializable {
     private static final String IMAGE_PATH = "/images/ghost.png";
     private Position position;
-    private final Image ghostImage;
+    private static Image ghostImage = ImageLoader.loadImage(IMAGE_PATH);
     private final Random random = new Random();
     private long lastMoveTime = 0;
     private final long moveInterval;
@@ -19,7 +19,6 @@ public class Ghost implements Character {
     public Ghost(final Position startPosition, final long moveInterval) {
         this.position = startPosition;
         this.moveInterval = moveInterval;
-        this.ghostImage = ImageLoader.loadImage(IMAGE_PATH);
     }
 
     @Override
@@ -37,7 +36,6 @@ public class Ghost implements Character {
             lastMoveTime = currentTime;
         }
     }
-
 
 
     @Override

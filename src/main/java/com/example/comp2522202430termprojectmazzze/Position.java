@@ -1,7 +1,9 @@
 package com.example.comp2522202430termprojectmazzze;
 
 
-public class Position {
+import java.io.Serializable;
+
+public class Position implements Serializable {
     private final int coordinateX;
     private final int coordinateY;
 
@@ -34,6 +36,7 @@ public class Position {
         }
         Position position = (Position) obj;
 
-        return getCoordinateX() == position.getCoordinateX() && getCoordinateY() == position.getCoordinateY();
+        return getCoordinateX() == position.getCoordinateX() && getCoordinateY()
+                == position.getCoordinateY();
     }
 }
