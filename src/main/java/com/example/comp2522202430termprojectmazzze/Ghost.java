@@ -14,11 +14,13 @@ public class Ghost implements Character, Updatable, Serializable {
     private final Random random = new Random();
     private long lastMoveTime = 0;
     private final long moveInterval;
+    private final GameLogic gameLogic;
 
 
-    public Ghost(final Position startPosition, final long moveInterval) {
+    public Ghost(final Position startPosition, final long moveInterval, final GameLogic gameLogic) {
         this.position = startPosition;
         this.moveInterval = moveInterval;
+        this.gameLogic = gameLogic;
     }
 
     @Override
@@ -31,9 +33,36 @@ public class Ghost implements Character, Updatable, Serializable {
     public void update(final boolean[][] maze) {
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastMoveTime >= moveInterval) {
-            Direction randomDirection = getRandomDirection();
-            move(randomDirection, maze);
+            double distanceToPlayer = position.distanceTo(gameLogic.getPlayerPosition());
+
+            if (distanceToPlayer <= GameLogic.getGhostDetectionRadius()) {
+                // 플레이어 추적
+                moveTowardPlayer(maze, gameLogic.getPlayerPosition());
+            } else {
+                // 랜덤 이동
+                Direction randomDirection = getRandomDirection();
+                move(randomDirection, maze);
+            }
             lastMoveTime = currentTime;
+        }
+    }
+
+    private void moveTowardPlayer(final boolean[][] maze, final Position playerPosition) {
+        int dx = playerPosition.getCoordinateX() - position.getCoordinateX();
+        int dy = playerPosition.getCoordinateY() - position.getCoordinateY();
+
+        Direction direction = null;
+
+        // 우선 이동할 방향 결정
+        if (Math.abs(dx) > Math.abs(dy)) {
+            direction = dx > 0 ? Direction.RIGHT : Direction.LEFT;
+        } else if (dy != 0) {
+            direction = dy > 0 ? Direction.DOWN : Direction.UP;
+        }
+
+        // 유효한 방향으로 이동
+        if (direction != null) {
+            move(direction, maze);
         }
     }
 

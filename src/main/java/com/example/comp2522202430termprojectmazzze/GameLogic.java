@@ -38,7 +38,7 @@ public class GameLogic implements Serializable {
         characters = new ArrayList<>();
         characters.add(player);
         for (int i = 0; i < 5; i++) {
-            characters.add(new Ghost(maze.getRandomFreePosition(), 1000));
+            characters.add(new Ghost(maze.getRandomFreePosition(), 1000, this)); // GameLogic 참조 전달
         }
         items = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -121,6 +121,11 @@ public class GameLogic implements Serializable {
         }
     }
 
+    public static double getGhostDetectionRadius() {
+        return GHOST_DETECTION_RADIUS;
+    }
+
+
     private void handleGameWin() {
         System.out.println("You Win! The player has reached the exit.");
     }
@@ -151,6 +156,11 @@ public class GameLogic implements Serializable {
     public boolean isFullMapVisible() {
         return isFullMapVisible;
     }
+
+    public Position getPlayerPosition() {
+        return player.getPosition();
+    }
+
 
     public boolean isGameWon() {
         return isGameWon;
