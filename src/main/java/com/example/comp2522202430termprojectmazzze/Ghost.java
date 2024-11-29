@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 import java.io.Serializable;
 import java.util.Random;
 
-public class Ghost implements Character, Serializable {
+public class Ghost implements Character, Updatable, Serializable {
     private static final String IMAGE_PATH = "/images/ghost.png";
     private Position position;
     private static Image ghostImage = ImageLoader.getInstance().loadImage(IMAGE_PATH);

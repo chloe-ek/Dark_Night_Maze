@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 
 import java.io.Serializable;
 
-public class Player implements Character, Updatable, Serializable {
+public class Player implements Character, Serializable {
     private static final long serialVersionUID = 1L;
 
     private static final String IMAGE_PATH_LEFT = "/images/redhoodie_left.png";
@@ -26,10 +26,7 @@ public class Player implements Character, Updatable, Serializable {
     public Player(final Position startPosition) {
         this.position = startPosition;
         this.currentDirection = Direction.RIGHT;
-
         this.flashlight = new Flashlight(this, 3, Color.LIGHTYELLOW, 0.5);
-
-
         loadImage(IMAGE_PATH);
         loadDeadImage();
     }
@@ -68,7 +65,7 @@ public class Player implements Character, Updatable, Serializable {
         return collectedItems;
     }
     public Flashlight getFlashlight() {
-        return flashlight; // Flashlight 접근 메서드
+        return flashlight;
     }
 
     @Override
@@ -114,9 +111,5 @@ public class Player implements Character, Updatable, Serializable {
             gc.fillRect(position.getCoordinateX() * tileSize,
                     position.getCoordinateY() * tileSize, tileSize, tileSize);
         }
-    }
-
-    @Override
-    public void update(final boolean[][] maze) {
     }
 }

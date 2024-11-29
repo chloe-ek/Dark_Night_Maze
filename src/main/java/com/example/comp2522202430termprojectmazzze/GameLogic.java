@@ -76,8 +76,8 @@ public class GameLogic implements Serializable {
 
         boolean ghostNearby = false;
         for (Character character : characters) {
-            character.update(maze.getStructure());
-            if (character instanceof Ghost) {
+            if (character instanceof Ghost ghost) {
+                ghost.update(maze.getStructure());
                 double distance = player.getPosition().distanceTo(character.getPosition());
                 if (distance <= GHOST_DETECTION_RADIUS) {
                     ghostNearby = true;
