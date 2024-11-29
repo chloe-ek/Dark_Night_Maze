@@ -16,12 +16,12 @@ public class Item implements Renderer, Serializable {
 
     public Item(final Position position) {
         this.position = position;
-        this.itemImage = ImageLoader.loadImage("/images/item.png");
+        this.itemImage = ImageLoader.getInstance().loadImage("/images/item.png");
 
     }
 
     private Object readResolve() {
-        itemImage = ImageLoader.loadImage("/images/item.png"); // 복원
+        itemImage = ImageLoader.getInstance().loadImage("/images/item.png");
         return this;
     }
 

@@ -26,16 +26,13 @@ class Maze implements Serializable {
         this.height = height;
         structure = new boolean[width][height];
 
-        wallImage = new Image(Objects.requireNonNull(getClass().
-                getResourceAsStream("/images/wall.png")));
-        tileImage = new Image(Objects.requireNonNull(getClass().
-                getResourceAsStream("/images/tile.png")));
+        wallImage = ImageLoader.getInstance().loadImage("/images/wall.png");
+        tileImage = ImageLoader.getInstance().loadImage("/images/tile.png");
+
     }
     private Object readResolve() {
-        wallImage = new Image(Objects.requireNonNull(getClass().
-                getResourceAsStream("/images/wall.png")));
-        tileImage = new Image(Objects.requireNonNull(getClass().
-                getResourceAsStream("/images/tile.png")));
+        wallImage = ImageLoader.getInstance().loadImage("/images/wall.png");
+        tileImage = ImageLoader.getInstance().loadImage("/images/tile.png");
         return this;
     }
 

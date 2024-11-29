@@ -10,7 +10,7 @@ import java.util.Random;
 public class Ghost implements Character, Serializable {
     private static final String IMAGE_PATH = "/images/ghost.png";
     private Position position;
-    private static Image ghostImage = ImageLoader.loadImage(IMAGE_PATH);
+    private static Image ghostImage = ImageLoader.getInstance().loadImage(IMAGE_PATH);
     private final Random random = new Random();
     private long lastMoveTime = 0;
     private final long moveInterval;

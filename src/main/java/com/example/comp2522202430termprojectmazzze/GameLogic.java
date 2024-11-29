@@ -12,7 +12,7 @@ import java.util.TimerTask;
 
 public class GameLogic implements Serializable {
     private static final double GHOST_DETECTION_RADIUS = 3.0;
-    private transient Image itemImage = ImageLoader.loadImage("/images/item.png");
+    private transient Image itemImage = ImageLoader.getInstance().loadImage("/images/item.png");
 
 
     private final Maze maze;
@@ -26,7 +26,7 @@ public class GameLogic implements Serializable {
     private Object readResolve() {
         System.out.println("readResolve called: Reinitializing transient fields.");
         soundManager = new SoundManager();
-        itemImage = ImageLoader.loadImage("/images/item.png");
+        itemImage = ImageLoader.getInstance().loadImage("/images/item.png");
         return this;
     }
 

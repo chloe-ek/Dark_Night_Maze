@@ -36,11 +36,11 @@ public class Player implements Character, Updatable, Serializable {
     }
 
     private void loadImage(final String imagePath) {
-        this.playerImage = ImageLoader.loadImage(imagePath);
+        this.playerImage = ImageLoader.getInstance().loadImage(imagePath);
     }
 
     private void loadDeadImage() {
-        this.deadImage = ImageLoader.loadImage(DEAD_IMAGE_PATH);
+        this.deadImage = ImageLoader.getInstance().loadImage(DEAD_IMAGE_PATH);
     }
     public boolean isAlive() {
         return isAlive;
