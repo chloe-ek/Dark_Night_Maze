@@ -31,7 +31,7 @@ public class GameRenderer {
     private long deathAnimationStartTime = 0;
 
     public void render(final GraphicsContext gc, final GameLogic gameLogic,
-                       final int tileSize, final Flashlight flashlight) {
+                       final int tileSize) {
         renderMaze(gc, gameLogic.getMaze(), tileSize);
 
         if (gameLogic.isGameWon()) {
@@ -57,8 +57,12 @@ public class GameRenderer {
             item.render(gc, tileSize);
         }
 
-        if (!gameLogic.isFullMapVisible() && flashlight != null) {
-            applyFlashlightEffect(gc, flashlight, tileSize);
+        if (!gameLogic.isFullMapVisible()) {
+            Player player = gameLogic.getPlayer();
+            Flashlight flashlight = player.getFlashlight();
+            if (flashlight != null) {
+                applyFlashlightEffect(gc, flashlight, tileSize);
+            }
         }
         renderHUD(gc, gameLogic.getPlayer(), gameLogic.getItemImage());
 

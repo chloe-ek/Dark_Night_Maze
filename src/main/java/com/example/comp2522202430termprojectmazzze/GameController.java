@@ -72,7 +72,7 @@ public class GameController extends Application {
             @Override
             public void handle(final long now) {
                 gameLogic.update();
-                gameRenderer.render(gc, gameLogic, TILE_SIZE, flashlight);
+                gameRenderer.render(gc, gameLogic, TILE_SIZE);
             }
         }.start();
     }

@@ -20,10 +20,15 @@ public class Player implements Character, Updatable, Serializable {
     private int collectedItems = 0;
     private boolean isAlive = true;
 
+    private final Flashlight flashlight;
+
 
     public Player(final Position startPosition) {
         this.position = startPosition;
         this.currentDirection = Direction.RIGHT;
+
+        this.flashlight = new Flashlight(this, 3, Color.LIGHTYELLOW, 0.5);
+
 
         loadImage(IMAGE_PATH);
         loadDeadImage();
@@ -61,6 +66,9 @@ public class Player implements Character, Updatable, Serializable {
 
     public int getCollectedItems() {
         return collectedItems;
+    }
+    public Flashlight getFlashlight() {
+        return flashlight; // Flashlight 접근 메서드
     }
 
     @Override
