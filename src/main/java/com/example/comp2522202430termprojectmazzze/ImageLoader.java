@@ -1,24 +1,37 @@
 package com.example.comp2522202430termprojectmazzze;
 
 import javafx.scene.image.Image;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class ImageLoader {
+/**
+ * Provides a singleton utility for loading and caching images.
+ * This class ensures efficient image management by storing loaded images in memory,
+ * preventing redundant loading of the same image.
+ *
+ * @author Eunji
+ * @version 2024
+ */
+public final class ImageLoader {
 
-    //singleton instance
     private static ImageLoader instance;
-
-    //image caching
     private final Map<String, Image> imageCache;
 
-    // private constructor
+    /**
+     * Initializes the ImageLoader with an empty image cache.
+     * This constructor is private to enforce the singleton pattern.
+     */
     private ImageLoader() {
         imageCache = new HashMap<>();
     }
 
+    /**
+     * Retrieves the singleton instance of ImageLoader.
+     * If no instance exists, creates one.
+     *
+     * @return the singleton instance of ImageLoader
+     */
     public static synchronized ImageLoader getInstance() {
         if (instance == null) {
             instance = new ImageLoader();
@@ -26,6 +39,15 @@ public class ImageLoader {
         return instance;
     }
 
+    /**
+     * Loads an image from the specified path.
+     * If the image is already cached, retrieves it from the cache.
+     * Otherwise, loads it from the file system, stores it in the cache, and returns it.
+     *
+     * @param imagePath the path to the image file as a String
+     * @return the loaded Image, or null if loading fails
+     * @throws IllegalArgumentException if the image resource is not found
+     */
     public Image loadImage(final String imagePath) {
 
         if (imageCache.containsKey(imagePath)) {
@@ -39,11 +61,11 @@ public class ImageLoader {
             ));
             imageCache.put(imagePath, image);
             return image;
-
-        } catch (Exception e) {
-            System.out.println("Failed to load image: " + imagePath);
-            e.printStackTrace();
-            return null;
+        } catch (NullPointerException e) {
+            System.err.println("Failed to load image: Resource not found at path " + imagePath);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Failed to load image: Invalid argument " + imagePath);
         }
+        return null;
     }
 }
