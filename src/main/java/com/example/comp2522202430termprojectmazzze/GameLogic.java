@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.io.Serial;
 
 /**
  * Handles the core game logic, including player actions, character updates,
@@ -26,7 +27,7 @@ public class GameLogic implements Serializable {
     private static final int GHOST_COUNT = 5;
     private static final int FULL_MAP_VISIBILITY_DURATION = 2000;
 
-    private final transient Image itemImage = ImageLoader.getInstance().
+    private transient Image itemImage = ImageLoader.getInstance().
             loadImage("/images/item.png");
 
     private final Maze maze;
@@ -35,7 +36,7 @@ public class GameLogic implements Serializable {
     private final List<Item> items;
     private boolean isFullMapVisible = false;
     private boolean isGameWon = false;
-    private final transient SoundManager soundManager;
+    private transient SoundManager soundManager;
 
     /**
      * Constructs a new GameLogic instance with the specified maze dimensions.
@@ -61,6 +62,12 @@ public class GameLogic implements Serializable {
         soundManager = new SoundManager();
     }
 
+    @Serial
+    private Object readResolve() {
+        soundManager = new SoundManager();
+        itemImage = ImageLoader.getInstance().loadImage("/images/item.png");
+        return this;
+    }
     /**
      * Retrieves the list of items in the game.
      *
