@@ -101,7 +101,7 @@ public class GameRenderer {
      */
     private void renderWinScreen(final GraphicsContext gc) {
         gc.setFill(Color.GREEN);
-        gc.fillText("Maze Master! You Win!",
+        gc.fillText("Maze Master!",
                 gc.getCanvas().getWidth() / 2 - TEXT_OFFSET, gc.getCanvas().getHeight() / 2);
     }
 
