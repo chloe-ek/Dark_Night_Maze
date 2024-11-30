@@ -15,7 +15,7 @@ import javafx.scene.paint.Color;
  * @author Eunji
  * @version 2024
  */
-class Maze implements Serializable {
+public class Maze implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     private static final int DIRECTIONS_COUNT = 4;
