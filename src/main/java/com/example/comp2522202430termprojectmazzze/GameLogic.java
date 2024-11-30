@@ -2,18 +2,32 @@ package com.example.comp2522202430termprojectmazzze;
 
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
+/**
+ * Handles the core game logic, including player actions, character updates,
+ * and game state management.
+ * <p>
+ * This class manages the maze structure, player and character positions, items,
+ * and the overall game state, including win and lose conditions. It also integrates
+ * with a sound manager for playing sound effects based on game events.
+ *
+ * @author Eunji
+ * @version 2024
+ */
 public class GameLogic implements Serializable {
     private static final double GHOST_DETECTION_RADIUS = 3.0;
-    private transient Image itemImage = ImageLoader.getInstance().loadImage("/images/item.png");
+    private static final int GHOST_MOVE_INTERVAL = 1000;
+    private static final int ITEM_COUNT = 5;
+    private static final int GHOST_COUNT = 5;
+    private static final int FULL_MAP_VISIBILITY_DURATION = 2000;
 
+    private final transient Image itemImage = ImageLoader.getInstance().
+            loadImage("/images/item.png");
 
     private final Maze maze;
     private final Player player;
@@ -21,15 +35,14 @@ public class GameLogic implements Serializable {
     private final List<Item> items;
     private boolean isFullMapVisible = false;
     private boolean isGameWon = false;
-    private transient SoundManager soundManager;
+    private final transient SoundManager soundManager;
 
-    private Object readResolve() {
-        System.out.println("readResolve called: Reinitializing transient fields.");
-        soundManager = new SoundManager();
-        itemImage = ImageLoader.getInstance().loadImage("/images/item.png");
-        return this;
-    }
-
+    /**
+     * Constructs a new GameLogic instance with the specified maze dimensions.
+     *
+     * @param width the width of the maze as an int
+     * @param height the height of the maze as an int
+     */
     public GameLogic(final int width, final int height) {
         maze = new Maze(width, height);
         maze.generateMaze();
@@ -37,43 +50,84 @@ public class GameLogic implements Serializable {
         player = new Player(new Position(width / 2, height / 2));
         characters = new ArrayList<>();
         characters.add(player);
-        for (int i = 0; i < 5; i++) {
-            characters.add(new Ghost(maze.getRandomFreePosition(), 1000, this)); // GameLogic 참조 전달
+        for (int i = 0; i < GHOST_COUNT; i++) {
+            characters.add(new Ghost(maze.getRandomFreePosition(),
+                    GHOST_MOVE_INTERVAL, this));
         }
         items = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < ITEM_COUNT; i++) {
             items.add(new Item(maze.getRandomFreePosition()));
         }
         soundManager = new SoundManager();
     }
 
-    public SoundManager getSoundManager() {
-        return soundManager;
-    }
-
-    public void setSoundManager(final SoundManager soundManager) {
-        this.soundManager = soundManager;
-    }
-
+    /**
+     * Retrieves the list of items in the game.
+     *
+     * @return a List of Item objects
+     */
     public List<Item> getItems() {
         return items;
     }
 
+    /**
+     * Retrieves the image used for rendering items.
+     *
+     * @return an Image object representing the item image
+     */
     public Image getItemImage() {
         return itemImage;
     }
 
+    /**
+     * Updates the game state, including player and ghost interactions, item collection,
+     * and game win/lose conditions.
+     */
     public void update() {
-        if (!player.isAlive() || isGameWon) {
+        if (isGameEndCondition()) {
             return;
         }
 
+        if (checkWinCondition()) {
+            return;
+        }
+
+        boolean ghostNearby = updateCharactersAndDetectGhosts();
+        handleGhostSound(ghostNearby);
+
+        processItemCollection();
+        checkPlayerCollisionWithGhost();
+    }
+
+    /**
+     * Checks if the game is over due to the player dying or the game being won.
+     *
+     * @return true if the game has ended, false otherwise
+     */
+    private boolean isGameEndCondition() {
+        return !player.isAlive() || isGameWon;
+    }
+
+    /**
+     * Checks if the player has reached the maze exit, marking the game as won if true.
+     *
+     * @return true if the player has won, false otherwise
+     */
+    private boolean checkWinCondition() {
         if (player.getPosition().equals(maze.getExitPosition())) {
             isGameWon = true;
             handleGameWin();
-            return;
+            return true;
         }
+        return false;
+    }
 
+    /**
+     * Updates all characters in the game and checks if any ghost is near the player.
+     *
+     * @return true if a ghost is near the player, false otherwise
+     */
+    private boolean updateCharactersAndDetectGhosts() {
         boolean ghostNearby = false;
         for (Character character : characters) {
             if (character instanceof Ghost ghost) {
@@ -84,7 +138,15 @@ public class GameLogic implements Serializable {
                 }
             }
         }
+        return ghostNearby;
+    }
 
+    /**
+     * Handles the ghost sound based on whether a ghost is near the player.
+     *
+     * @param ghostNearby true if a ghost is near the player, false otherwise
+     */
+    private void handleGhostSound(final boolean ghostNearby) {
         if (soundManager != null) {
             if (ghostNearby) {
                 soundManager.playGhostSound();
@@ -94,7 +156,12 @@ public class GameLogic implements Serializable {
         } else {
             System.err.println("Warning: SoundManager is null in update().");
         }
+    }
 
+    /**
+     * Processes item collection by the player and updates visibility if necessary.
+     */
+    private void processItemCollection() {
         items.removeIf(item -> {
             if (player.getPosition().equals(item.getPosition())) {
                 player.collectItem();
@@ -103,10 +170,15 @@ public class GameLogic implements Serializable {
             }
             return false;
         });
+    }
 
-        // Ghost와 충돌 확인
+    /**
+     * Checks if the player collides with any ghost and handles the player's death if true.
+     */
+    private void checkPlayerCollisionWithGhost() {
         for (Character character : characters) {
-            if (character instanceof Ghost && player.getPosition().equals(character.getPosition())) {
+            if (character instanceof Ghost && player.getPosition().
+                    equals(character.getPosition())) {
                 player.die();
                 handlePlayerDeath();
                 break;
@@ -114,6 +186,12 @@ public class GameLogic implements Serializable {
         }
     }
 
+
+    /**
+     * Handles player input by interpreting key events and moving the player accordingly.
+     *
+     * @param event a KeyEvent representing the user's input
+     */
     public void handleInput(final KeyEvent event) {
         Direction direction = Direction.fromKeyCode(event.getCode());
         if (direction != null) {
@@ -121,10 +199,14 @@ public class GameLogic implements Serializable {
         }
     }
 
+    /**
+     * Retrieves the ghost detection radius.
+     *
+     * @return the ghost detection radius as a double
+     */
     public static double getGhostDetectionRadius() {
         return GHOST_DETECTION_RADIUS;
     }
-
 
     private void handleGameWin() {
         System.out.println("You Win! The player has reached the exit.");
@@ -134,10 +216,8 @@ public class GameLogic implements Serializable {
         System.out.println("Game Over! The player has died.");
     }
 
-
-
     private void checkFullMapVisibility() {
-        if (player.getCollectedItems() >= 5 && !isFullMapVisible) {
+        if (player.getCollectedItems() >= ITEM_COUNT && !isFullMapVisible) {
             enableFullMapVisibility();
         }
     }
@@ -150,30 +230,59 @@ public class GameLogic implements Serializable {
             public void run() {
                 isFullMapVisible = false;
             }
-        }, 2000);
+        }, FULL_MAP_VISIBILITY_DURATION);
     }
 
+    /**
+     * Checks if the full map is currently visible.
+     *
+     * @return true if the full map is visible, false otherwise
+     */
     public boolean isFullMapVisible() {
         return isFullMapVisible;
     }
 
+    /**
+     * Retrieves the player's current position.
+     *
+     * @return a Position object representing the player's current position
+     */
     public Position getPlayerPosition() {
         return player.getPosition();
     }
 
-
+    /**
+     * Checks if the game has been won.
+     *
+     * @return true if the game is won, false otherwise
+     */
     public boolean isGameWon() {
         return isGameWon;
     }
 
+    /**
+     * Retrieves the player object.
+     *
+     * @return the Player object representing the player
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Retrieves the maze object.
+     *
+     * @return the Maze object representing the game maze
+     */
     public Maze getMaze() {
         return maze;
     }
 
+    /**
+     * Retrieves the list of characters in the game, including the player and ghosts.
+     *
+     * @return a List of Character objects
+     */
     public List<Character> getCharacters() {
         return characters;
     }
