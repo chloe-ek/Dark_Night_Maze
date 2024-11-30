@@ -4,11 +4,13 @@ package com.example.comp2522202430termprojectmazzze;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.*;
 
+import java.io.Serializable;
 
-public class Flashlight {
+
+public class Flashlight implements Serializable {
     private final Player player;
     private int radius;
-    private final Color color;
+    private final transient Color color;
     private final double opacity;
 
     /**
