@@ -1,21 +1,24 @@
 package com.example.comp2522202430termprojectmazzze;
 
 import javafx.animation.AnimationTimer;
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.util.Timer;
-import java.util.TimerTask;
+/**
+ * Manages the main game screen, including game logic, rendering, and user input.
+ * <p>
+ * This class initializes the game environment, handles input events, and updates
+ * the game state in real-time using an AnimationTimer.
+ *
+ * @author Eunji
+ * @version 2024
+ */
+public class GameController {
 
-
-public class GameController extends Application {
     private static final String SAVE_FILE = System.getProperty("user.dir") + "/game_save.dat";
 
     private static final int TILE_SIZE = 40;
@@ -24,50 +27,87 @@ public class GameController extends Application {
 
     private GameLogic gameLogic;
     private GameRenderer gameRenderer;
-    private Flashlight flashlight;
 
+    /**
+     * Displays the game screen and sets up the game environment.
+     *
+     * @param primaryStage the primary stage where the game screen is displayed
+     */
+    public void showGameScreen(final Stage primaryStage) {
+        primaryStage.setTitle("Dark Night Maze");
 
-
-    @Override
-    public void start(final Stage primaryStage) {
-        primaryStage.setTitle("Dark Night Maze"); //window title
-
-        Canvas canvas = new Canvas(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
+        Canvas canvas = setupCanvas();
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        // Initialize game logic and renderer
+        initializeGameLogic();
+        setupScene(canvas, primaryStage);
 
+        startGameLoop(gc);
+    }
+
+    /**
+     * Sets up the canvas for rendering.
+     *
+     * @return the initialized canvas
+     */
+    private Canvas setupCanvas() {
+        return new Canvas(WIDTH * TILE_SIZE, HEIGHT * TILE_SIZE);
+    }
+
+    /**
+     * Initializes the game logic and renderer.
+     */
+    private void initializeGameLogic() {
         gameLogic = new GameLogic(WIDTH, HEIGHT);
         gameRenderer = new GameRenderer();
+    }
 
-        // Initialize flashlight
-        Player player = gameLogic.getPlayer();
-        flashlight = new Flashlight(player, 3, Color.LIGHTYELLOW, 0.5);
-
-
+    /**
+     * Sets up the scene and handles input events.
+     *
+     * @param canvas the canvas to be added to the scene
+     * @param stage the primary stage for the game
+     */
+    private void setupScene(final Canvas canvas, final Stage stage) {
         Scene scene = new Scene(new StackPane(canvas));
+        stage.setScene(scene);
+        stage.show();
 
+        scene.setOnKeyPressed(this::handleKeyPress);
+    }
 
-        scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.S) {
-                GameSaver.saveGame(gameLogic, SAVE_FILE);
-            } else if (event.getCode() == KeyCode.L) {
-                GameLogic loadedGame = GameSaver.loadGame(SAVE_FILE);
-                if (loadedGame != null) {
-                    gameLogic = loadedGame;
-                    flashlight = new Flashlight(gameLogic.getPlayer(), 3, Color.LIGHTYELLOW, 0.5);
-                    System.out.println("Game Loaded!");
-                } else {
-                    System.out.println("Failed to load game.");
-                }
-            } else {
-                gameLogic.handleInput(event);
-            }
-        });
+    /**
+     * Handles key press events for saving, loading, and other game controls.
+     *
+     * @param event the key event containing the pressed key
+     */
+    private void handleKeyPress(final KeyEvent event) {
+        switch (event.getCode()) {
+            case S -> GameSaver.saveGame(gameLogic, SAVE_FILE);
+            case L -> loadGame();
+            default -> gameLogic.handleInput(event);
+        }
+    }
 
-        primaryStage.setScene(scene);
-        primaryStage.show();
+    /**
+     * Loads a previously saved game state and updates the game environment.
+     */
+    private void loadGame() {
+        GameLogic loadedGame = GameSaver.loadGame(SAVE_FILE);
+        if (loadedGame != null) {
+            gameLogic = loadedGame;
+            System.out.println("Game Loaded!");
+        } else {
+            System.out.println("Failed to load game.");
+        }
+    }
 
+    /**
+     * Starts the game update loop using an AnimationTimer.
+     *
+     * @param gc the GraphicsContext used for rendering
+     */
+    private void startGameLoop(final GraphicsContext gc) {
         new AnimationTimer() {
             @Override
             public void handle(final long now) {
@@ -76,19 +116,4 @@ public class GameController extends Application {
             }
         }.start();
     }
-
-    private void showTemporaryMessage(final GraphicsContext gc, final String message) {
-        gc.setFill(Color.WHITE);
-        gc.fillText(message, 10, 20); // 메시지 위치: (10, 20)
-
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(() -> {
-                    gc.clearRect(10, 5, 150, 30); // 메시지가 그려진 영역만 지움
-                });
-            }
-        }, 2000); // 2초 후 메시지 지움
-    }
-
 }
