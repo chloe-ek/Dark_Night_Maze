@@ -112,7 +112,7 @@ public class GameLogic implements Serializable {
      * @return true if the game has ended, false otherwise
      */
     private boolean isGameEndCondition() {
-        return !player.isAlive() || isGameWon;
+        return player.isAlive() || isGameWon;
     }
 
     /**

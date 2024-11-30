@@ -68,7 +68,7 @@ public class GameRenderer {
 
         for (Character character : gameLogic.getCharacters()) {
             if (character instanceof Player player) {
-                if (!player.isAlive()) {
+                if (player.isAlive()) {
                     if (deathAnimationStartTime == 0) {
                         deathAnimationStartTime = System.currentTimeMillis();
                     }
