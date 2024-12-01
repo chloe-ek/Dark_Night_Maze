@@ -17,5 +17,4 @@ public interface Movable {
      * @param maze the maze structure indicating valid movement paths as a boolean
      */
     void move(Direction direction, boolean[][] maze);
-
 }

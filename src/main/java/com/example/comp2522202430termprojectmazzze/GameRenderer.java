@@ -16,7 +16,6 @@ import javafx.scene.text.Font;
  * @version 2024
  */
 public class GameRenderer {
-
     private static final double HUD_START_X = 10.0;
     private static final double HUD_START_Y = 10.0;
     private static final double HUD_ICON_SIZE = 40.0;
@@ -91,7 +90,6 @@ public class GameRenderer {
             }
         }
         renderHUD(gc, gameLogic.getPlayer(), gameLogic.getItemImage());
-
     }
 
     /**
@@ -148,7 +146,6 @@ public class GameRenderer {
                         flashlight.getOpacity() * FLASHLIGHT_GRADIENT_STOP_1)),
                 new Stop(1.0, Color.BLACK)
         );
-
         gc.setFill(gradient);
         gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
     }
@@ -163,5 +160,4 @@ public class GameRenderer {
     private void renderMaze(final GraphicsContext gc, final Maze maze, final int tileSize) {
         maze.render(gc, tileSize);
     }
-
 }

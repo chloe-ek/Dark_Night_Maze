@@ -62,7 +62,6 @@ public final class GameSaver {
             System.err.println("Save file does not exist: " + filePath);
             return null;
         }
-
         try (FileInputStream fis = new FileInputStream(filePath);
              ObjectInputStream ois = new ObjectInputStream(fis)) {
             return (GameLogic) ois.readObject();

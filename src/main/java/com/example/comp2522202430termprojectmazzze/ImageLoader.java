@@ -14,7 +14,6 @@ import java.util.Objects;
  * @version 2024
  */
 public final class ImageLoader {
-
     private static ImageLoader instance;
     private final Map<String, Image> imageCache;
 

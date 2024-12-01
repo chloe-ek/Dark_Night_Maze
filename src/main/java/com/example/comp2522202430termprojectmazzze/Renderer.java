@@ -18,5 +18,4 @@ public interface Renderer {
      * @param tileSize the size of each tile in pixels as an int
      */
     void render(GraphicsContext gc, int tileSize);
-
 }

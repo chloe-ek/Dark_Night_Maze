@@ -16,15 +16,12 @@ import java.io.Serial;
 public class Player implements Character, Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-
     private static final String IMAGE_PATH_LEFT = "/images/redhoodie_left.png";
     private static final String IMAGE_PATH = "/images/redhoodie.png";
     private static final String DEAD_IMAGE_PATH = "/images/dead.png";
 
     private static final int FLASHLIGHT_RADIUS = 3;
     private static final double FLASHLIGHT_OPACITY = 0.5;
-
-
     private Position position;
     private transient Image playerImage;
     private transient Image deadImage;

@@ -151,6 +151,4 @@ public class Ghost implements Character, Updatable, Serializable {
                     position.getCoordinateY() * tileSize, tileSize, tileSize);
         }
     }
-
-
 }

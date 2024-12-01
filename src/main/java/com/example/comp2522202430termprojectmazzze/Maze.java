@@ -21,16 +21,12 @@ public class Maze implements Serializable {
     private static final int DIRECTIONS_COUNT = 4;
     private static final double RANDOM_PATH_THRESHOLD = 0.25;
     private static final int MIN_PATH_NEIGHBORS = 3;
-
-
     private boolean[][] structure;
     private final int width;
     private final int height;
     private final Random random = new Random();
-
     private transient Image wallImage;
     private transient Image tileImage;
-
     private Position exitPosition;
 
     /**
@@ -45,7 +41,6 @@ public class Maze implements Serializable {
         structure = new boolean[width][height];
         wallImage = ImageLoader.getInstance().loadImage("/images/wall.png");
         tileImage = ImageLoader.getInstance().loadImage("/images/tile.png");
-
     }
 
     /**
@@ -335,5 +330,4 @@ public class Maze implements Serializable {
                     exitPosition.getCoordinateY() * tileSize, tileSize, tileSize);
         }
     }
-
 }

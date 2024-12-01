@@ -15,5 +15,4 @@ public interface Updatable {
      * @param maze the maze structure representing valid paths as a boolean
      */
     void update(boolean[][] maze);
-
 }

@@ -193,7 +193,6 @@ public class GameLogic implements Serializable {
         }
     }
 
-
     /**
      * Handles player input by interpreting key events and moving the player accordingly.
      *
@@ -293,8 +292,4 @@ public class GameLogic implements Serializable {
     public List<Character> getCharacters() {
         return characters;
     }
-
-
-
-
 }
