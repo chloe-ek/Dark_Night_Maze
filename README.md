@@ -1,11 +1,5 @@
-# **COMP 2522 Term Project - Dark Night Maze**
+## Dark Night Maze 
 
-## Project Members
-- **Name**: Eunji Kwon
-- **Student Number**: A01384203
-- **GitHub Username**: eunji-cs(https://github.com/eunji-cs)
-
----
 
 ## **Game Overview**
 **Dark Night Maze** is a suspenseful escape game where players must navigate a dark maze filled with ghosts. Your objective is to collect items, avoid ghosts, and escape through the exit.  
@@ -57,11 +51,6 @@ Start your adventure now! 🎮
 
 ---
 
-## Project Setup
-Clone the Repository:
-https://github.com/eunji-cs/COMP-2522-202430-Term-Project-Mazzze.git</br>
-
----
 
 ### Using IntelliJ IDEA:
 1. Navigate to MainApp.java (entry point).
@@ -71,6 +60,5 @@ https://github.com/eunji-cs/COMP-2522-202430-Term-Project-Mazzze.git</br>
 
 
 ## Contact 
-For any questions or issues, please contact:
-[ekwon9@my.bcit.ca](https://github.com/eunji-cs/COMP-2522-202430-Term-Project-Mazzze.git)
+For any questions or issues, please contact: 
 
