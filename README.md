@@ -12,6 +12,10 @@
 
 Can you outwit the ghosts and escape the **Dark Night Maze**?  
 
+
+https://github.com/user-attachments/assets/78f6ebca-a5b3-4e03-a54a-08f7600abb68
+
+
 ---
 
 ## **Game Features**
