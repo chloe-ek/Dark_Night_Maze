@@ -1,19 +1,27 @@
 ## Dark Night Maze 
-![darknightmaze](https://github.com/user-attachments/assets/e377b536-c7ef-4ac1-b655-095e7676976c)
 
+A suspenseful escape game where players must navigate a dark maze filled with ghosts. Your objective is to collect items, avoid ghosts, and escape through the exit.  
+
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/e377b536-c7ef-4ac1-b655-095e7676976c" width="300" alt="darknightmaze">
+</div>
 
 ## **Game Overview**
-**Dark Night Maze** is a suspenseful escape game where players must navigate a dark maze filled with ghosts. Your objective is to collect items, avoid ghosts, and escape through the exit.  
 
 - Ghosts will chase you if spotted, adding to the thrill and challenge.  
 - Eerie music plays as a warning when a ghost is nearby.  
 - Collect **5 items** to temporarily illuminate the maze and make finding the exit easier.  
 - **Save and Load**: Press **S** to save progress and **L** to load a saved game.  
 
-Can you outwit the ghosts and escape the **Dark Night Maze**?  
 
+## **Sample Gameplay**
 
-https://github.com/user-attachments/assets/78f6ebca-a5b3-4e03-a54a-08f7600abb68
+<div align="center">
+  <video width="400" controls>
+    <source src="https://github.com/user-attachments/assets/78f6ebca-a5b3-4e03-a54a-08f7600abb68" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
 
 
 ---
@@ -61,9 +69,4 @@ Start your adventure now! 🎮
 1. Navigate to MainApp.java (entry point).
 2. Press Shift + F10 or click the Run button to start the game.
 
----
-
-
-## Contact 
-For any questions or issues, please contact: 
 
