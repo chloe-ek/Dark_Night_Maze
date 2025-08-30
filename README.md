@@ -16,12 +16,7 @@ A suspenseful escape game where players must navigate a dark maze filled with gh
 
 ## **Sample Gameplay**
 
-<div align="center">
-  <video width="400" controls>
-    <source src="https://github.com/user-attachments/assets/78f6ebca-a5b3-4e03-a54a-08f7600abb68" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</div>
+https://github.com/user-attachments/assets/39d6ed77-d760-4be0-a0c7-4c86656b7918
 
 
 ---
